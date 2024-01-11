@@ -23,7 +23,7 @@
         <div class="others">
             <li>
             <form action="./product_search.php" method="post">
-                <input name="search" placeholder="Tim kiem" type="text" style="height: 20px;padding-left: 5px;"><i class="fas fa-search" style="margin-top: 2px;"></i>
+                <input name="search" placeholder="Tim kiem"  value="<?php if(isset($_POST['submit'])) echo $_POST['search'] ?>" type="text" style="height: 20px;padding-left: 5px;"><i class="fas fa-search" style="margin-top: 2px;"></i>
                 <input type="submit" name="submit" value="Tìm kiếm" class="btn">
             </form>
                 

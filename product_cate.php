@@ -54,7 +54,6 @@
             <div class="category-right">
                 <div class="category-right-top">
                     <div class="category-right-top-item">
-                        <p>Hàng mới về</p>
                     </div>
                     <div class="category-right-top-item">
                         <select name="" id="">

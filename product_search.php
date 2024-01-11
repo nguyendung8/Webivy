@@ -1,9 +1,9 @@
 <?php
     include('config.php');
-    if(isset($_GET['cate_id'])) {
-        $cate_id = $_GET['cate_id'];
+    if(isset($_POST['submit'])) {
+        $search_name = $_POST['search'];
     } else {
-        $cate_id = 1;
+        $search_name = '';
     }
 ?>
 <!DOCTYPE html>
@@ -24,50 +24,12 @@
     <!------------------- Category---------------------------- -->
     <section class="category">
         <div class="container">
-        <?php  
-            $select_categories = mysqli_query($conn, "SELECT * FROM categories where id = $cate_id") or die('query failed');
-            $fetch_categories = mysqli_fetch_assoc($select_categories)
-        ?>
-            <div class="category-top">
-                <p>Trang chủ</p> <span>&#10230;</span>
-                <p><?php echo $fetch_categories['name'] ?></p>
-            </div>
-        </div>
-        <div class="container">
-
-            <div class="category-left">
-                <ul>
-                <?php  
-                    $select_categories = mysqli_query($conn, "SELECT * FROM categories") or die('query failed');
-                    if(mysqli_num_rows($select_categories) > 0){
-                        while($fetch_categories = mysqli_fetch_assoc($select_categories)){
-                ?>
-                        <li class="category-left-li "><a href="./product_cate.php?cate_id=<?php echo $fetch_categories['id'] ?>"><?php echo $fetch_categories['name']; ?></a></li>
-                <?php
-                        }
-                    }else{
-                        echo '<p class="empty">Chưa có danh mục nào!</p>';
-                    }
-                ?>
-                </ul>
-            </div>
             <div class="category-right">
-                <div class="category-right-top">
-                    <div class="category-right-top-item">
-                        <p>Hàng mới về</p>
-                    </div>
-                    <div class="category-right-top-item">
-                        <select name="" id="">
-                            <option value="">Sắp xếp</option>
-                            <option value="">Giá cao đến thấp</option>
-                            <option value="">Giá thấp đến cao</option>
-                        </select>
-                    </div>
-                </div>
-
+                
+                <h1>Danh sách sản phẩm theo từ khóa tìm kiểm của bạn</h1>
                 <div style="gap: 15px;" class="category-right-content">
                 <?php  
-                        $select_products = mysqli_query($conn, "SELECT * FROM products where cate_id = $cate_id") or die('query failed');
+                        $select_products = mysqli_query($conn, "SELECT * FROM products where name  LIKE '%{$search_name}%'") or die('query failed');
                         if(mysqli_num_rows($select_products) > 0){
                             while($fetch_product = mysqli_fetch_assoc($select_products)){
                     ?>
@@ -80,7 +42,7 @@
                         <?php
                                 }
                             }else{
-                                echo '<p class="empty">Chưa có sản phẩm nào!</p>';
+                                echo '<p class="empty">Không có sản phẩm phù hợp với yêu cầu tìm kiếm của bạn!</p>';
                             }
                         ?>
             </div>

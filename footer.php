@@ -6,7 +6,9 @@
         background-color: rgb(168, 228, 141);
         padding: 30px 0;
         z-index: 2000;
-        position: relative;
+        position: fixed;
+        bottom: 0;
+        left: 0;
     }
 
     #footer li {
