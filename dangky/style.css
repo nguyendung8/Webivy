@@ -1,0 +1,14 @@
+.form {
+    width: 300px;
+    border: 1px solid green;
+    padding: 20px;
+    margin : 70px auto ;
+    font-weight: 700px;
+    background-color: #fdfadc;
+
+   }
+   .form input {
+    width: 100%;
+    padding: 10px 0;
+    margin-top: 20px;
+   }
