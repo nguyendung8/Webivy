@@ -16,7 +16,7 @@
 
 <body>
  <?php  include('header.php') ?>
-    <!---------------------------- Slider ------------------------------>
+ <!---------------------------- Slider ------------------------------>
     <section id="Slider">
         <div class="aspect-ratio-169">
             <img src="images/anh-nen-nhe-nhang-don-gian-cuc-dep_025018889.jpg" alt="" class="bgr">

@@ -12,48 +12,8 @@
 </head>
 
 <body>
-    <section class="fixed-header">
-        <div class="logo">
-           <a href="index.html"><img src="images/Logo.png" alt=""></a> 
-        </div>
-        <div class="menu"><a href=""></a>
-            <li><a href="">NỮ</a>
-                <ul class="sub-menu">
-                    <li><a href="category.html">Hàng mới về</a></li>
-                    <li><a href="">Trendy</a></li>
-                    <li><a href="">Áo</a>
-                        <ul>
-                            <li><a href="">Áo sơ mi</a></li>
-                            <li><a href="">Áo thun</a></li>
-                            <li><a href="">Áo vest</a></li>
-                            <li><a href="">Áo khoác</a></li>
-                            <li><a href="">Áo len</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="">Quần</a>
-                        <ul>
-                            <li><a href="">Quần jean</a></li>
-                            <li><a href="">Quần lửng</a></li>
-                            <li><a href="">Quần dài</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li><a href="">NAM</a></li>
-            <li><a href="">TRẺ EM</a></li>
-            <li><a href="">SALE</a></li>
-            <li><a href="">KHẨU TRANG</a></li>
-            <li><a href="">BST</a></li>
-            <li><a href="">THÔNG TIN</a></li>
-        </div>
-        <div class="others">
-            <li><input placeholder="Tim kiem" type="text" style="height: 20px;padding-left: 5px;"><i
-                    class="fas fa-search" style="margin-top: 2px;"></i></li>
-            <!-- <li><a href="" class="fa fa-paw"></a></li> -->
-            <li><a href="dangnhap/login.php" class="fa fa-user"></a></li>
-            <li><a href="" class="fa fa-shopping-bag"></a></li>
-        </div>
-    </section>
+<?php  include('header.php') ?>
+
     <!--------------- Cart ------------------------->
 
     <section class="cart">
@@ -153,11 +113,8 @@
         </div>
     </section>
     <!----------------- Footer ----------------->
-    <div class="footer">
-        <li><a href=""><b>Liên hệ :</b> 0123456789</a></li>
+    <?php  include('footer.php') ?>
 
-        <li><a href=""><b>Gmail :</b> Quinshop@gmail.com </a></li>
-    </div>
 </body>
 
 </html>

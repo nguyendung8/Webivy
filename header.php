@@ -1,5 +1,7 @@
 <?php
     include('config.php');
+    session_start();
+    $user_id = $_SESSION['user_id']; //tạo session người dùng thường
 ?>
     <link rel="stylesheet" href="style.css">
 <section class="fixed-header">
@@ -29,7 +31,13 @@
                 
             </li>
             <!-- <li><a href="" class="fa fa-paw"></a></li> -->
-            <li><a href="dangnhap/login.php" class="fa fa-user"></a></li>
-            <li><a href="" class="fa fa-shopping-bag"></a></li>
+            <?php
+                if(!isset($user_id)){// session không tồn tại => quay lại trang đăng nhập
+            ?>
+             <li><a href="dangnhap/login.php" class="fa fa-user">Đăng nhập</a></li>
+            <?php } else { ?>
+             <li><a href="./logout.php" class="fa fa-user">Đăng xuất</a></li>
+            <?php } ?>
+                <li><a href="" class="fa fa-shopping-bag"></a></li>
         </div>
     </section>

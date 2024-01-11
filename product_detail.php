@@ -1,9 +1,54 @@
 <?php 
     include('config.php');
+    session_start();
+
     if(isset($_GET['product_id'])) {
         $product_id = $_GET['product_id'];
     } else {
         $product_id = 1;
+    }
+    if(isset($_SESSION['user_id'])) {
+        $user_id = $_SESSION['user_id']; //tạo session người dùng thường
+    }
+
+    if(isset($_POST['add_to_cart'])){//thêm sách vào giỏi hàng từ form submit name='add_to_cart'
+        if(!$user_id){// session không tồn tại => quay lại trang đăng nhập
+            header('location:dangnhap/login.php');
+        } else {   
+            $product_name = $_POST['product_name'];
+            $product_price = $_POST['product_price'];
+            $product_image = $_POST['product_image'];
+            $product_quantity = $_POST['product_quantity'];
+            $size = $_POST['size'];
+      
+            if($product_quantity==0){
+               echo '<script>';
+               echo 'alert("Sản phẩm đã hết hàng!");';
+               echo '</script>';
+            }
+            else{
+               $check_cart_numbers = mysqli_query($conn, "SELECT * FROM `carts` WHERE name = '$product_name' AND user_id = '$user_id'") or die('query failed');
+      
+               if(mysqli_num_rows($check_cart_numbers) > 0){//kiểm tra sách có trong giỏ hàng chưa và tăng số lượng
+                  $result=mysqli_fetch_assoc($check_cart_numbers);
+                  $num=$result['quantity']+$product_quantity;
+                  $select_quantity = mysqli_query($conn, "SELECT * FROM `products` WHERE name='$product_name'");
+                  $fetch_quantity = mysqli_fetch_assoc($select_quantity);
+                  if($num>$fetch_quantity['quantity']){
+                     $num=$fetch_quantity['quantity'];
+                  }
+                  mysqli_query($conn, "UPDATE `carts` SET quantity='$num' WHERE name = '$product_name' AND user_id = '$user_id'");
+                  echo '<script>';
+                  echo 'alert("Sản phẩm đã có trong giỏ hàng và được thêm số lượng!");';
+                  echo '</script>';
+                  header('location:cart.php');
+               }else{
+                  mysqli_query($conn, "INSERT INTO `carts`(user_id, name, size, price, quantity, image) VALUES('$user_id', '$product_name', '$size', '$product_price', '$product_quantity', '$product_image')") or die('query failed');
+                  $message[] = 'Sản phẩm đã được thêm vào giỏ hàng!';
+                  header('location:cart.php');
+               }
+            }
+        }
     }
 ?>
 
@@ -31,7 +76,7 @@
         ?>
     <section class="product">
         <div class="container">
-            <div class="product-content">
+            <form  method="post" class="product-content">
                 <div class="product-content-left">
                     <div class="product-content-left-big-img">
                         <img src="./admin/uploaded_img/<?php echo $fetch_product['image'] ?>" alt="">
@@ -46,23 +91,24 @@
                         <span><?php echo number_format($fetch_product['price'], 0,',','.') ?><sup>đ</sup></span>
                     </div>
                     <div class="product-content-right-size">
-                        <p style="font-weight: bold;">Size :</p>
                         <p style="color: red;font-size: 12px;">Xin quý khách chọn size *</p>
-                        <div class="size">
-                            <span>S</span>
-                            <span>M</span>
-                            <span>L</span>
-                            <span>XL</span>
-                        </div>
+                        <span style="font-weight: bold;">Size :</span>
+                        <select name="size" class="size">
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                        </select>
                     </div>
                     <div class="quantity">
                         <p style="font-weight:bold">Số lượng : </p>
-                        <input type="number" min="0" value="1">
+                        <input type="number" min="<?=($fetch_product['quantity']>0) ? 1:0 ?>" max="<?php echo $fetch_product['quantity']; ?>" name="product_quantity" value="<?=($fetch_product['quantity']>0) ? 1:0 ?>" class="qty">
+                        <input type="hidden" name="product_name" value="<?php echo $fetch_product['name']; ?>">
+                        <input type="hidden" name="product_price" value="<?php echo $fetch_product['price']; ?>">
+                        <input type="hidden" name="product_image" value="<?php echo $fetch_product['image']; ?>">
                     </div>
                     <div class="product-content-right-button">
-                        <button><i class="fas fa-shopping-cart"></i>
-                           <a href="cart.html"><p style="padding-left: 7px;">Mua hàng </p></a> 
-                        </button>
+                            <input style="padding-left: 7px; margin-bottom: 10px;" type="submit" value="Thêm vào giỏ hàng" name="add_to_cart" class="btn">
                     </div>
                     <div class="product-content-right-icon">
                         <div class="product-content-right-icon-item">
