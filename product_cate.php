@@ -56,32 +56,61 @@
                     <div class="category-right-top-item">
                     </div>
                     <div class="category-right-top-item">
-                        <select name="" id="">
-                            <option value="">Sắp xếp</option>
-                            <option value="">Giá cao đến thấp</option>
-                            <option value="">Giá thấp đến cao</option>
+                        <select onchange="redirectToPage(this.value)">
+                            <option>
+                                Sắp xếp
+                            </option>
+                            <option value="?cate_id=<?php echo $cate_id ?>&sort=asc">
+                                Giá thấp đến cao
+                            </option>
+                            <option value="?cate_id=<?php echo $cate_id ?>&sort=desc">
+                                Giá cao đến thấp
+                            </option>
                         </select>
                     </div>
                 </div>
-
-                <div style="gap: 15px;" class="category-right-content">
-                <?php  
-                        $select_products = mysqli_query($conn, "SELECT * FROM products where cate_id = $cate_id") or die('query failed');
-                        if(mysqli_num_rows($select_products) > 0){
-                            while($fetch_product = mysqli_fetch_assoc($select_products)){
-                    ?>
-                            
-                    <div class="category-right-content-item">
-                        <a href="product_detail.php?product_id=<?php echo $fetch_product['id'];?>"><img style="width: 280px; height: 390px;" src="./admin/uploaded_img/<?php echo $fetch_product['image'] ?>" alt="">
-                        <h1><?php echo $fetch_product['name'] ?></h1>
-                        <p><?php echo  number_format($fetch_product['price'], 0,',','.') ?><sup>đ</sup></p></a>
+                <?php
+                    if(isset($_GET['sort'])) {
+                        $sort = $_GET['sort'];
+                ?>
+                    <div style="gap: 15px; margin-bottom: 83px;" class="category-right-content">
+                        <?php  
+                            $select_products = mysqli_query($conn, "SELECT * FROM products where cate_id = $cate_id ORDER BY price $sort") or die('query failed');
+                            if(mysqli_num_rows($select_products) > 0){
+                                while($fetch_product = mysqli_fetch_assoc($select_products)){
+                        ?>
+                        <div class="category-right-content-item">
+                            <a href="product_detail.php?product_id=<?php echo $fetch_product['id'];?>"><img style="width: 280px; height: 390px;" src="./admin/uploaded_img/<?php echo $fetch_product['image'] ?>" alt="">
+                            <h1><?php echo $fetch_product['name'] ?></h1>
+                            <p><?php echo  number_format($fetch_product['price'], 0,',','.') ?><sup>đ</sup></p></a>
+                        </div>
+                        <?php
+                                }
+                            } else{
+                                echo '<p class="empty">Chưa có sản phẩm nào!</p>';
+                            }
+                        ?>
                     </div>
+                <?php } else {?>
+                    <div style="gap: 15px; margin-bottom: 83px;" class="category-right-content">
+                        <?php  
+                            $select_products = mysqli_query($conn, "SELECT * FROM products where cate_id = $cate_id") or die('query failed');
+                            if(mysqli_num_rows($select_products) > 0){
+                                while($fetch_product = mysqli_fetch_assoc($select_products)){
+                        ?>
+                        <div class="category-right-content-item">
+                            <a href="product_detail.php?product_id=<?php echo $fetch_product['id'];?>"><img style="width: 280px; height: 390px;" src="./admin/uploaded_img/<?php echo $fetch_product['image'] ?>" alt="">
+                            <h1><?php echo $fetch_product['name'] ?></h1>
+                            <p><?php echo  number_format($fetch_product['price'], 0,',','.') ?><sup>đ</sup></p></a>
+                        </div>
                         <?php
                                 }
                             }else{
                                 echo '<p class="empty">Chưa có sản phẩm nào!</p>';
                             }
                         ?>
+                    </div>
+                <?php   } ?>
             </div>
 
 
@@ -101,6 +130,12 @@
             menu.classList.toggle("block")
         })
     })
+
+    function redirectToPage(url) {
+        if (url) {
+            window.location.href = url;
+        }
+    }
 </script>
 
 </html>

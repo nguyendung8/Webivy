@@ -37,7 +37,7 @@
              <li><a href="dangnhap/login.php" class="fa fa-user">Đăng nhập</a></li>
             <?php } else { ?>
              <li><a href="./logout.php" class="fa fa-user">Đăng xuất</a></li>
+             <li><a href="./cart.php" class="fa fa-shopping-bag"></a></li>
             <?php } ?>
-                <li><a href="./cart.php" class="fa fa-shopping-bag"></a></li>
         </div>
     </section>
