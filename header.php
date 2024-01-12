@@ -38,6 +38,6 @@
             <?php } else { ?>
              <li><a href="./logout.php" class="fa fa-user">Đăng xuất</a></li>
             <?php } ?>
-                <li><a href="" class="fa fa-shopping-bag"></a></li>
+                <li><a href="./cart.php" class="fa fa-shopping-bag"></a></li>
         </div>
     </section>

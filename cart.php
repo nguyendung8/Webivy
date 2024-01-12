@@ -1,3 +1,26 @@
+<?php
+    include('config.php');
+    session_start();
+    $user_id = $_SESSION['user_id'];
+
+    if(isset($_POST['update_cart'])){//cập nhật giỏ hàng từ form submit name='update_cart'
+        $cart_id = $_POST['cart_id'];
+        $cart_quantity = $_POST['cart_quantity'];
+        mysqli_query($conn, "UPDATE `carts` SET quantity = '$cart_quantity' WHERE id = $cart_id") or die('query failed');
+        echo '<script>';
+        echo 'alert("Giỏ hàng đã được cập nhật!");';
+        echo '</script>';
+     }
+  
+     if(isset($_GET['delete'])){//xóa sách khỏi giỏ hàng từ onclick href='delete'
+        $delete_id = $_GET['delete'];
+        mysqli_query($conn, "DELETE FROM `carts` WHERE id = '$delete_id'") or die('query failed');
+        echo '<script>';
+        echo 'alert("Sản phẩm đã được xóa khỏi giỏ hàng!");';
+        echo '</script>';
+        header('location: cart.php');
+     }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,38 +67,46 @@
                             <th>Tổng tiền SP</th>
                             <th>Xóa SP</th>
                         </tr>
-                        <tr>
-                            <td><img src="images/sanpham1.jpg" alt=""></td>
-                            <td>
-                                <p>Đầm trễ vai xoắn ngực</p>
-                            </td>
-                            <td>
-                                <p>S</p>
-                            </td>
-                            <td><input type="number" value="1" min="1"></td>
-                            <td>
-                                <p>700.000 <sup>đ</sup></p>
-                            </td>
-                            <td>
-                                <span>X</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><img src="images/sanpham1.2.jpg" alt=""></td>
-                            <td>
-                                <p>Đầm trễ vai xoắn ngực </p>
-                            </td>
-                            <td>
-                                <p>L</p>
-                            </td>
-                            <td><input type="number" value="1" min="1"></td>
-                            <td>
-                                <p>700.000 <sup>đ</sup></p>
-                            </td>
-                            <td>
-                                <span>X</span>
-                            </td>
-                        </tr>
+                        <?php
+                            $grand_total = 0;
+                            $select_cart = mysqli_query($conn, "SELECT * FROM `carts` WHERE user_id = $user_id") or die('query failed');//lấy ra giỏ hàng tương ứng với id người dùng
+                            if(mysqli_num_rows($select_cart) > 0){
+                                while($fetch_cart = mysqli_fetch_assoc($select_cart)){ 
+                                $name_product = $fetch_cart['name'];
+                                $select_quantity = mysqli_query($conn, "SELECT * FROM `products` WHERE name='$name_product'");
+                                $fetch_quantity = mysqli_fetch_assoc($select_quantity); 
+                                $grand_total += $fetch_cart['price'] * $fetch_cart['quantity'];
+                        ?>
+                        <form method="post">
+                            <tr>
+                                <td><img src="./admin/uploaded_img/<?php echo ($fetch_cart['image'])  ?>" alt=""></td>
+                                <td>
+                                    <p><?php echo($fetch_cart['name'])  ?></p>
+                                </td>
+                                <td>
+                                    <p><?php echo($fetch_cart['size'])  ?></p>
+                                </td>
+                                <td>
+                                    <input style="padding-left: 4px; width: 40px;" type="number" min="1" max="<?=$fetch_quantity['quantity']?>" name="cart_quantity" value="<?php echo $fetch_cart['quantity']; ?>">
+                                    <input type="hidden" name="cart_id" value="<?php echo $fetch_cart['id']; ?>">
+                                    <input style="width: unset;" type="submit" name="update_cart" value="Cập nhật">
+                                </td>
+                                <td>
+                                    <p><?php echo number_format($fetch_cart['price']* $fetch_cart['quantity'],0,',','.' ); ?><sup>đ</sup></p>
+                                </td>
+                                <td>
+                                    <a href="cart.php?delete=<?php echo $fetch_cart['id']; ?>" onclick="return confirm('Xóa sản phẩm này khỏi giỏ hàng?');">
+                                        <span>X</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </form>
+                        <?php
+                                }
+                            }else{
+                                echo '<p class="empty">Giỏ hàng của bạn trống!</p>';
+                            }
+                        ?>
                     </table>
                 </div>
                 <div class="cart-content-right">
@@ -85,18 +116,18 @@
                         </tr>
                         <tr>
                             <td>Tổng sản phẩm </td>
-                            <td>2</td>
+                            <td><?php echo mysqli_num_rows($select_cart)  ?></td>
                         </tr>
                         <tr>
                             <td>Tổng tiền hàng</td>
                             <td>
-                                <p>700.000 <sup> đ</sup></p>
+                                <p><?php echo number_format($grand_total,0,',','.' ); ?><sup> đ</sup></p>
                             </td>
                         </tr>
                         <tr>
                             <td>Tạm tính</td>
                             <td>
-                                <p style="color: black;font-weight: bold;">700.000 <sup> đ</sup></p>
+                                <p style="color: black;font-weight: bold;"><?php echo number_format($grand_total,0,',','.' ); ?><sup> đ</sup></p>
                             </td>
                         </tr>
                     </table>
@@ -104,8 +135,8 @@
                         <p style="color: red;">* Miễn phí ship với hóa đơn trên 1.000.000 <sup>đ</sup></p>
                     </div>
                     <div class="cart-content-right-button">
-                        <a href="category.html"><button>TIẾP TỤC MUA SẮM </button></a>
-                        <button>THANH TOÁN </button>
+                        <a href="product_cate.php"><button>TIẾP TỤC MUA SẮM </button></a>
+                        <a href="checkout.php"><button>THANH TOÁN </button></a>
                     </div>
 
                 </div>

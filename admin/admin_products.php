@@ -90,8 +90,8 @@
          $refersh_name = $res_nums['name'];
          $refersh_price = mysqli_query($conn,"SELECT * FROM `products` WHERE name = '$refersh_name'");
          $res_price = mysqli_fetch_assoc($refersh_price);
-         $price_new = $res_price['newprice'];
-         mysqli_query($conn, "UPDATE `cart` SET price = '$price_new' WHERE name = '$refersh_name' ");
+         $price_new = $res_price['price'];
+         mysqli_query($conn, "UPDATE `carts` SET price = '$price_new' WHERE name = '$refersh_name' ");
       }
    }
 
