@@ -1,7 +1,9 @@
 <?php
     include('config.php');
     session_start();
-    $user_id = $_SESSION['user_id']; //tạo session người dùng thường
+    if(isset($_SESSION['user_id'])) {
+        $user_id = $_SESSION['user_id']; //tạo session người dùng thường
+    }
 ?>
     <link rel="stylesheet" href="style.css">
 <section class="fixed-header">
